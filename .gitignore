@@ -1,0 +1,21 @@
+# Terraform: downloaded add-ons, state and saved plans must never be committed
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfplan
+tfplan
+*.tfvars
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+# Evidence produced by local runs (may contain real identifiers)
+evidence/
+
+# Operating system files
+.DS_Store
+Thumbs.db
