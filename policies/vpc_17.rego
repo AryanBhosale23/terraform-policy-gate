@@ -13,3 +13,6 @@ deny contains msg if {
 	some address in open_ports.violating(ssh_port)
 	msg := sprintf("VPC-17: %s allows SSH (port 22) from the whole internet", [address])
 }
+
+# The resources this rule judged (used for the evidence records).
+scope := open_ports.scope

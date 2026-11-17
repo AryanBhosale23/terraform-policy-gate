@@ -40,3 +40,8 @@ deny contains msg if {
 	not protected(bucket.address)
 	msg := sprintf("S3-07: %s needs a public access block with all four settings on", [bucket.address])
 }
+
+# The resources this rule judged (used for the evidence records).
+scope contains bucket.address if {
+	some bucket in buckets
+}

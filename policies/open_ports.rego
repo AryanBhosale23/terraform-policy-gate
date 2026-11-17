@@ -24,11 +24,11 @@ is_world(cidrs) if {
 
 # Does the range from..to include the port?
 # If either end is missing, we cannot tell, so we say "yes" (no data must not pass).
-covers(from, to, port) if {
+covers(from, _, _) if {
 	not is_number(from)
 }
 
-covers(from, to, port) if {
+covers(_, to, _) if {
 	not is_number(to)
 }
 
@@ -38,13 +38,14 @@ covers(from, to, port) if {
 }
 
 # Does a rule with this protocol and port range expose the port?
-# "-1" means every protocol and every port. "tcp" needs the range to include the port.
-exposes(protocol, from, to, port) if {
+# "-1" means every protocol and every port. TCP (written "tcp", "TCP" or "6") needs the range to include the port.
+exposes(protocol, _, _, _) if {
 	protocol == "-1"
 }
 
 exposes(protocol, from, to, port) if {
-	protocol == "tcp"
+	is_string(protocol)
+	lower(protocol) in {"tcp", "6"}
 	covers(from, to, port)
 }
 
@@ -89,3 +90,16 @@ old(port) := {r.address |
 
 # Every resource that opens the port to the whole internet, in any of the four forms.
 violating(port) := ((inline_v4(port) | inline_v6(port)) | modern(port)) | old(port)
+
+# The resources this helper judges (used for the evidence records):
+# security groups with inline rules, modern standalone rules, and old standalone "ingress" rules.
+scope contains r.address if {
+	some r in live
+	r.type in {"aws_security_group", "aws_vpc_security_group_ingress_rule"}
+}
+
+scope contains r.address if {
+	some r in live
+	r.type == "aws_security_group_rule"
+	r.change.after.type == "ingress"
+}

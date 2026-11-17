@@ -76,3 +76,35 @@ resource "aws_security_group" "rdp_inline" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# Insecure on purpose: a network with no flow log (nothing records its traffic).
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+# Insecure on purpose: a KMS key that never rotates (enable_key_rotation defaults to false).
+resource "aws_kms_key" "no_rotation" {
+  description             = "Insecure demo: key without automatic rotation"
+  deletion_window_in_days = 7
+}
+
+# Insecure on purpose: a trail that covers one region only, has no log file validation
+# and does not encrypt its logs with KMS. It writes into the demo bucket.
+resource "aws_cloudtrail" "weak" {
+  name           = "demo-weak-trail"
+  s3_bucket_name = aws_s3_bucket.demo.id
+}
+
+# Insecure on purpose: a policy that allows every action on every resource.
+resource "aws_iam_policy" "admin" {
+  name = "demo-admin-everything"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "*"
+      Resource = "*"
+    }]
+  })
+}

@@ -104,3 +104,49 @@ resource "aws_security_group" "web" {
     cidr_blocks = ["10.0.0.0/8"]
   }
 }
+
+# A network whose rejected and accepted traffic is recorded (flow log, traffic type ALL).
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_flow_log" "main" {
+  vpc_id               = aws_vpc.main.id
+  traffic_type         = "ALL"
+  log_destination_type = "s3"
+  log_destination      = aws_s3_bucket.logs.arn
+}
+
+# A KMS key that rotates itself every year.
+resource "aws_kms_key" "trail" {
+  description             = "Secure demo: key for CloudTrail logs"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+}
+
+# A trail that covers every region, validates its log files and encrypts them with the key above.
+# It writes into the log bucket. (A real trail also needs a bucket policy and a key policy.
+# We only ever plan, never apply, so the demo leaves them out.)
+resource "aws_cloudtrail" "main" {
+  name                       = "demo-secure-trail"
+  s3_bucket_name             = aws_s3_bucket.logs.id
+  is_multi_region_trail      = true
+  enable_log_file_validation = true
+  kms_key_id                 = aws_kms_key.trail.arn
+}
+
+# A narrow policy: read objects from one bucket only. The ARN is built from the bucket NAME,
+# which is known at plan time. (The bucket's .arn attribute is unknown until apply, which would
+# make the whole policy text unreadable at plan time, and IAM-06 would flag it.)
+resource "aws_iam_policy" "read_logs" {
+  name = "demo-read-logs"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["s3:GetObject"]
+      Resource = ["arn:aws:s3:::${aws_s3_bucket.logs.bucket}/*"]
+    }]
+  })
+}

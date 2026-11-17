@@ -118,3 +118,21 @@ test_old_rule_egress_is_allowed if {
 	plan := {"resource_changes": [old_rule("egress", 22, 22, "tcp", world)]}
 	count(vpc_17.deny) == 0 with input as plan
 }
+
+# TCP can also be written as its protocol number, 6.
+test_inline_protocol_number_6_open_to_world_is_denied if {
+	plan := {"resource_changes": [sg([ingress(22, 22, "6", world)])]}
+	count(vpc_17.deny) == 1 with input as plan
+}
+
+# Capital letters must not hide a rule.
+test_inline_uppercase_tcp_open_to_world_is_denied if {
+	plan := {"resource_changes": [sg([ingress(22, 22, "TCP", world)])]}
+	count(vpc_17.deny) == 1 with input as plan
+}
+
+# UDP is a different protocol, so SSH (TCP) is not exposed by it.
+test_inline_udp_is_allowed if {
+	plan := {"resource_changes": [sg([ingress(22, 22, "udp", world)])]}
+	count(vpc_17.deny) == 0 with input as plan
+}

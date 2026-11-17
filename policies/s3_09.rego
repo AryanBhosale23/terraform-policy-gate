@@ -43,3 +43,8 @@ deny contains msg if {
 	not protected(bucket.address)
 	msg := sprintf("S3-09: %s needs a versioning resource with status Enabled", [bucket.address])
 }
+
+# The resources this rule judged (used for the evidence records).
+scope contains bucket.address if {
+	some bucket in buckets
+}

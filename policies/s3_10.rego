@@ -52,3 +52,10 @@ deny contains msg if {
 	not logged(bucket.address)
 	msg := sprintf("S3-10: %s needs access logging to a log bucket", [bucket.address])
 }
+
+# The resources this rule judged (used for the evidence records).
+# A bucket that receives logs is exempt, so it is not in scope.
+scope contains bucket.address if {
+	some bucket in buckets
+	not bucket.address in log_destinations
+}

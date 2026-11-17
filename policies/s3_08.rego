@@ -45,3 +45,8 @@ deny contains msg if {
 	not protected(bucket.address)
 	msg := sprintf("S3-08: %s needs default encryption (AES256 or aws:kms)", [bucket.address])
 }
+
+# The resources this rule judged (used for the evidence records).
+scope contains bucket.address if {
+	some bucket in buckets
+}

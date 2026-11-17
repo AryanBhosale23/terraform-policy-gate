@@ -13,3 +13,6 @@ deny contains msg if {
 	some address in open_ports.violating(rdp_port)
 	msg := sprintf("VPC-18: %s allows RDP (port 3389) from the whole internet", [address])
 }
+
+# The resources this rule judged (used for the evidence records).
+scope := open_ports.scope

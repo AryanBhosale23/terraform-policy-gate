@@ -1,21 +1,25 @@
-# Terraform: downloaded add-ons, state and saved plans must never be committed
+# Terraform: never commit state, provider downloads or saved plans
 .terraform/
 *.tfstate
 *.tfstate.*
 crash.log
-*.tfplan
 tfplan
-*.tfvars
-
+*.tfplan
+# A plan can contain real values from a real stack. Plans are made fresh (locally and in CI), never stored.
+plan.json
+# Secrets and AWS config: never commit these
+.env
+.env.*
+*.pem
+*.key
+.aws/
+credentials
 # Python
-.venv/
 __pycache__/
+*.pyc
+.venv/
+venv/
 .pytest_cache/
 .ruff_cache/
-
-# Evidence produced by local runs (may contain real identifiers)
+# Real gate output stays local. Only reviewed samples go in examples/
 evidence/
-
-# Operating system files
-.DS_Store
-Thumbs.db

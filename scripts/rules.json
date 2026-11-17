@@ -1,0 +1,236 @@
+{
+  "cis_version": "CIS AWS Foundations Benchmark v7.1.0",
+  "rules": [
+    {
+      "id": "S3-07",
+      "package": "s3_07",
+      "title": "Every S3 bucket has a public access block with all four settings on",
+      "types": [
+        "aws_s3_bucket"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 3.1.4",
+      "nist": "AC-3",
+      "iso": "A.8.3",
+      "soc2": "CC6.1",
+      "remediation": "Add an aws_s3_bucket_public_access_block for the bucket with all four settings set to true.",
+      "checkov": [
+        "CKV2_AWS_6"
+      ],
+      "checkov_relation": "weaker",
+      "checkov_note": "Checkov only checks that a public access block is attached, not that all four settings are true."
+    },
+    {
+      "id": "S3-08",
+      "package": "s3_08",
+      "title": "Every S3 bucket has default encryption (AES256 or aws:kms)",
+      "types": [
+        "aws_s3_bucket"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 3.1.5",
+      "nist": "SC-28",
+      "iso": "A.8.24",
+      "soc2": "CC6.1",
+      "remediation": "Add an aws_s3_bucket_server_side_encryption_configuration for the bucket (AES256 at minimum, aws:kms if required).",
+      "checkov": [
+        "CKV_AWS_145"
+      ],
+      "checkov_relation": "stricter",
+      "checkov_note": "Checkov requires a KMS key. This gate accepts AES256 as well, to match the scanner in Project 1."
+    },
+    {
+      "id": "S3-09",
+      "package": "s3_09",
+      "title": "Every S3 bucket has versioning enabled",
+      "types": [
+        "aws_s3_bucket"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, none",
+      "nist": "CP-9",
+      "iso": "A.8.13",
+      "soc2": "A1.2",
+      "remediation": "Add an aws_s3_bucket_versioning for the bucket with status = \"Enabled\".",
+      "checkov": [
+        "CKV_AWS_21"
+      ],
+      "checkov_relation": "same",
+      "checkov_note": "Agreed on both example folders."
+    },
+    {
+      "id": "S3-10",
+      "package": "s3_10",
+      "title": "Every S3 bucket writes server access logs to a log bucket",
+      "types": [
+        "aws_s3_bucket"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 4.4 (partial)",
+      "nist": "AU-12",
+      "iso": "A.8.15",
+      "soc2": "CC7.2",
+      "remediation": "Add an aws_s3_bucket_logging for the bucket with a target_bucket. A bucket that only receives logs is exempt.",
+      "checkov": [
+        "CKV_AWS_18"
+      ],
+      "checkov_relation": "same",
+      "checkov_note": "Agreed on both example folders. Project 1 is stricter: it also fails a bucket that only receives logs.",
+      "not_applicable_reason": "This bucket is the destination of another bucket's access logs, so it is exempt."
+    },
+    {
+      "id": "VPC-15",
+      "package": "vpc_15",
+      "title": "Every VPC has a flow log that records rejected traffic",
+      "types": [
+        "aws_vpc"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 4.7",
+      "nist": "SI-4",
+      "iso": "A.8.16",
+      "soc2": "CC7.2",
+      "remediation": "Add an aws_flow_log for the VPC with traffic_type = \"REJECT\" or \"ALL\".",
+      "checkov": [
+        "CKV2_AWS_11"
+      ],
+      "checkov_relation": "weaker",
+      "checkov_note": "Checkov passes a flow log that records only accepted traffic."
+    },
+    {
+      "id": "VPC-17",
+      "package": "vpc_17",
+      "title": "No security group allows SSH (port 22) from the whole internet",
+      "types": [
+        "aws_security_group",
+        "aws_vpc_security_group_ingress_rule",
+        "aws_security_group_rule"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 6.3",
+      "nist": "SC-7",
+      "iso": "A.8.20",
+      "soc2": "CC6.6",
+      "remediation": "Replace the 0.0.0.0/0 (or ::/0) source with a trusted range, or delete the rule.",
+      "checkov": [
+        "CKV_AWS_24"
+      ],
+      "checkov_relation": "same",
+      "checkov_note": "Agreed in every case tried: IPv6, port ranges, all-protocol rules and the three rule forms.",
+      "not_applicable_reason": "This is an egress rule (traffic going out), so it is not judged."
+    },
+    {
+      "id": "VPC-18",
+      "package": "vpc_18",
+      "title": "No security group allows RDP (port 3389) from the whole internet",
+      "types": [
+        "aws_security_group",
+        "aws_vpc_security_group_ingress_rule",
+        "aws_security_group_rule"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 6.3",
+      "nist": "SC-7",
+      "iso": "A.8.20",
+      "soc2": "CC6.6",
+      "remediation": "Replace the 0.0.0.0/0 (or ::/0) source with a trusted range, or delete the rule.",
+      "checkov": [
+        "CKV_AWS_25"
+      ],
+      "checkov_relation": "same",
+      "checkov_note": "Agreed on inline rules, port ranges and all-protocol rules. IPv6 and the standalone rule forms were only tried for SSH.",
+      "not_applicable_reason": "This is an egress rule (traffic going out), so it is not judged."
+    },
+    {
+      "id": "CT-11",
+      "package": "ct_11",
+      "title": "Every CloudTrail trail is multi-region, logging, and records all management events",
+      "types": [
+        "aws_cloudtrail"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 4.1",
+      "nist": "AU-12",
+      "iso": "A.8.15",
+      "soc2": "CC7.2",
+      "remediation": "Set is_multi_region_trail = true, keep enable_logging = true and record all management events (reads and writes).",
+      "checkov": [
+        "CKV_AWS_67"
+      ],
+      "checkov_relation": "weaker",
+      "checkov_note": "Checkov only checks that the trail is multi-region. It passes a trail with logging off or read-only events."
+    },
+    {
+      "id": "CT-12",
+      "package": "ct_12",
+      "title": "Every CloudTrail trail has log file validation enabled",
+      "types": [
+        "aws_cloudtrail"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 4.2",
+      "nist": "AU-9",
+      "iso": "A.8.15",
+      "soc2": "CC7.2",
+      "remediation": "Set enable_log_file_validation = true on the trail.",
+      "checkov": [
+        "CKV_AWS_36"
+      ],
+      "checkov_relation": "same",
+      "checkov_note": "Agreed on both example folders."
+    },
+    {
+      "id": "CT-13",
+      "package": "ct_13",
+      "title": "Every CloudTrail trail encrypts its logs with a KMS key",
+      "types": [
+        "aws_cloudtrail"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 4.5",
+      "nist": "SC-28",
+      "iso": "A.8.24",
+      "soc2": "CC6.1",
+      "remediation": "Set kms_key_id on the trail to a KMS key.",
+      "checkov": [
+        "CKV_AWS_35"
+      ],
+      "checkov_relation": "same",
+      "checkov_note": "Agreed on both example folders."
+    },
+    {
+      "id": "KMS-19",
+      "package": "kms_19",
+      "title": "Automatic rotation is enabled on customer-managed KMS keys",
+      "types": [
+        "aws_kms_key"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 4.6",
+      "nist": "SC-12",
+      "iso": "A.8.24",
+      "soc2": "CC6.1",
+      "remediation": "Set enable_key_rotation = true on the key.",
+      "checkov": [
+        "CKV_AWS_7"
+      ],
+      "checkov_relation": "same",
+      "checkov_note": "Agreed on both example folders.",
+      "not_applicable_reason": "This key cannot rotate automatically (asymmetric, disabled or imported key material), so it is not judged."
+    },
+    {
+      "id": "IAM-06",
+      "package": "iam_06",
+      "title": "No IAM policy grants full administrator access",
+      "types": [
+        "aws_iam_policy",
+        "aws_iam_role_policy",
+        "aws_iam_user_policy",
+        "aws_iam_group_policy",
+        "aws_iam_role_policy_attachment",
+        "aws_iam_user_policy_attachment",
+        "aws_iam_group_policy_attachment",
+        "aws_iam_policy_attachment"
+      ],
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 2.14",
+      "nist": "AC-6",
+      "iso": "A.8.2",
+      "soc2": "CC6.3",
+      "remediation": "Replace the wildcard action and resource with the specific actions and resources needed, and never attach AdministratorAccess.",
+      "checkov": [
+        "CKV_AWS_62"
+      ],
+      "checkov_relation": "partial",
+      "checkov_note": "Checkov judges policy documents but not attachments of the AdministratorAccess managed policy."
+    }
+  ]
+}

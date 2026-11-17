@@ -1,0 +1,95 @@
+name: Policy gate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  # Job 1: test the rules themselves and the Python script. No Terraform or AWS needed.
+  rules:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: open-policy-agent/setup-opa@v2
+        with:
+          version: latest
+      - name: Rego files are formatted
+        run: test -z "$(opa fmt --list policies)"
+      - name: Rego files pass the strict check
+        run: opa check --strict policies
+      - name: Rego rule tests
+        run: opa test policies -v
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest ruff
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: pytest -q
+
+  # Job 2: run the real gate on the two example folders.
+  # The secure example must pass every rule and the insecure one must fail every rule.
+  # A gate that cannot fail proves nothing, so the insecure example is the proof that it can.
+  gate:
+    needs: rules
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [secure, insecure]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: open-policy-agent/setup-opa@v2
+        with:
+          version: latest
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~> 1.17"
+          terraform_wrapper: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install checkov
+
+      # The fake keys in main.tf let `plan` run with no AWS account. We never run `apply`.
+      - name: Terraform plan
+        working-directory: terraform/${{ matrix.example }}
+        run: |
+          terraform init -input=false
+          terraform plan -input=false -out=tfplan
+          terraform show -json tfplan > plan.json
+
+      - name: Run the gate (OPA decides, Checkov gives a second opinion)
+        id: gate
+        continue-on-error: true
+        run: >
+          python scripts/policy_gate.py
+          --plan terraform/${{ matrix.example }}/plan.json
+          --output evidence/${{ matrix.example }}
+          --checkov
+
+      - name: Check the result is what this example promises
+        run: |
+          summary=$(ls evidence/${{ matrix.example }}/*/summary.json)
+          python - "$summary" "${{ matrix.example }}" "${{ steps.gate.outcome }}" <<'PY'
+          import json, sys
+          path, example, outcome = sys.argv[1:4]
+          rules = json.load(open(path))["rules"]
+          want = "PASS" if example == "secure" else "FAIL"
+          bad = [r["check_id"] for r in rules if r["verdict"] != want]
+          expected_outcome = "success" if example == "secure" else "failure"
+          assert len(rules) == 12, f"expected 12 rules, got {len(rules)}"
+          assert not bad, f"{example}: these rules did not give {want}: {bad}"
+          assert outcome == expected_outcome, f"{example}: gate outcome was {outcome}"
+          print(f"{example}: all 12 rules gave {want}, as promised")
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidence-${{ matrix.example }}
+          path: evidence/${{ matrix.example }}
