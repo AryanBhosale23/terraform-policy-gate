@@ -84,3 +84,23 @@ resource "aws_s3_bucket_logging" "demo" {
   target_bucket = aws_s3_bucket.logs.id
   target_prefix = "demo-bucket-logs/"
 }
+
+# Secure: websites (HTTPS) are open to everyone, but SSH only from the private network.
+resource "aws_security_group" "web" {
+  name        = "demo-web"
+  description = "Secure demo: HTTPS from anywhere, SSH only from the private network"
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+}
