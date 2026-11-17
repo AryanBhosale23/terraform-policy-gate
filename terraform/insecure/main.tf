@@ -63,3 +63,16 @@ resource "aws_security_group_rule" "ssh_old" {
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
 }
+
+# Insecure on purpose: RDP (port 3389, Windows remote desktop) open to the whole internet.
+resource "aws_security_group" "rdp_inline" {
+  name        = "demo-rdp-inline"
+  description = "Insecure demo: RDP open to the world"
+
+  ingress {
+    from_port   = 3389
+    to_port     = 3389
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
