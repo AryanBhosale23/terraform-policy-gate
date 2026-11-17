@@ -46,3 +46,41 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "demo" {
     }
   }
 }
+
+# A second bucket that receives the access logs (the "diary" bucket).
+resource "aws_s3_bucket" "logs" {
+  bucket = "aryan-policy-gate-secure-logs"
+}
+
+resource "aws_s3_bucket_public_access_block" "logs" {
+  bucket                  = aws_s3_bucket.logs.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_versioning" "logs" {
+  bucket = aws_s3_bucket.logs.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "logs" {
+  bucket = aws_s3_bucket.logs.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+# The main bucket writes its access log into the log bucket.
+resource "aws_s3_bucket_logging" "demo" {
+  bucket        = aws_s3_bucket.demo.id
+  target_bucket = aws_s3_bucket.logs.id
+  target_prefix = "demo-bucket-logs/"
+}
