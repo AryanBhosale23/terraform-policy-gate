@@ -1,5 +1,11 @@
 # terraform-policy-gate
 
+![Policy gate report: 12 of 12 rules pass on the secure example](docs/report.png)
+
+![Where Checkov and the OPA rules disagree](docs/report-checkov.png)
+
+![Where Checkov and the OPA rules disagree](docs/report-checkov.png)
+
 ![Policy gate](https://github.com/AryanBhosale23/terraform-policy-gate/actions/workflows/policy-gate.yml/badge.svg)
 
 A GitHub Actions gate that checks Terraform code for AWS **before** it is deployed. It reads the

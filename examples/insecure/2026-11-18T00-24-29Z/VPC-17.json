@@ -1,0 +1,197 @@
+[
+  {
+    "check_id": "VPC-17",
+    "title": "No security group allows SSH (port 22) from the whole internet",
+    "status": "PASS",
+    "resource": "aws_security_group.rdp_inline",
+    "resource_type": "aws_security_group",
+    "timestamp": "2026-11-18T00:24:29Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 6.3",
+      "nist_800_53_r5": "SC-7",
+      "iso_27001_2022": "A.8.20",
+      "soc2": "CC6.6"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/vpc_17.rego",
+      "checkov": {
+        "check_id": "CKV_AWS_24",
+        "result": "PASSED",
+        "relation": "same"
+      }
+    },
+    "remediation": "Replace the 0.0.0.0/0 (or ::/0) source with a trusted range, or delete the rule.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "b33b2f515ea6831b0a2c2927c808a4e31482e21e99c66e99c7828aacc7826754",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  },
+  {
+    "check_id": "VPC-17",
+    "title": "No security group allows SSH (port 22) from the whole internet",
+    "status": "FAIL",
+    "resource": "aws_security_group.ssh_inline",
+    "resource_type": "aws_security_group",
+    "timestamp": "2026-11-18T00:24:29Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 6.3",
+      "nist_800_53_r5": "SC-7",
+      "iso_27001_2022": "A.8.20",
+      "soc2": "CC6.6"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/vpc_17.rego",
+      "problems": [
+        "allows SSH (port 22) from the whole internet"
+      ],
+      "checkov": {
+        "check_id": "CKV_AWS_24",
+        "result": "FAILED",
+        "relation": "same"
+      }
+    },
+    "remediation": "Replace the 0.0.0.0/0 (or ::/0) source with a trusted range, or delete the rule.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "b33b2f515ea6831b0a2c2927c808a4e31482e21e99c66e99c7828aacc7826754",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  },
+  {
+    "check_id": "VPC-17",
+    "title": "No security group allows SSH (port 22) from the whole internet",
+    "status": "PASS",
+    "resource": "aws_security_group.ssh_modern",
+    "resource_type": "aws_security_group",
+    "timestamp": "2026-11-18T00:24:29Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 6.3",
+      "nist_800_53_r5": "SC-7",
+      "iso_27001_2022": "A.8.20",
+      "soc2": "CC6.6"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/vpc_17.rego",
+      "checkov": {
+        "check_id": "CKV_AWS_24",
+        "result": "PASSED",
+        "relation": "same"
+      }
+    },
+    "remediation": "Replace the 0.0.0.0/0 (or ::/0) source with a trusted range, or delete the rule.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "b33b2f515ea6831b0a2c2927c808a4e31482e21e99c66e99c7828aacc7826754",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  },
+  {
+    "check_id": "VPC-17",
+    "title": "No security group allows SSH (port 22) from the whole internet",
+    "status": "PASS",
+    "resource": "aws_security_group.ssh_old",
+    "resource_type": "aws_security_group",
+    "timestamp": "2026-11-18T00:24:29Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 6.3",
+      "nist_800_53_r5": "SC-7",
+      "iso_27001_2022": "A.8.20",
+      "soc2": "CC6.6"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/vpc_17.rego",
+      "checkov": {
+        "check_id": "CKV_AWS_24",
+        "result": "PASSED",
+        "relation": "same"
+      }
+    },
+    "remediation": "Replace the 0.0.0.0/0 (or ::/0) source with a trusted range, or delete the rule.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "b33b2f515ea6831b0a2c2927c808a4e31482e21e99c66e99c7828aacc7826754",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  },
+  {
+    "check_id": "VPC-17",
+    "title": "No security group allows SSH (port 22) from the whole internet",
+    "status": "FAIL",
+    "resource": "aws_security_group_rule.ssh_old",
+    "resource_type": "aws_security_group_rule",
+    "timestamp": "2026-11-18T00:24:29Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 6.3",
+      "nist_800_53_r5": "SC-7",
+      "iso_27001_2022": "A.8.20",
+      "soc2": "CC6.6"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/vpc_17.rego",
+      "problems": [
+        "allows SSH (port 22) from the whole internet"
+      ],
+      "checkov": {
+        "check_id": "CKV_AWS_24",
+        "result": "PASSED",
+        "relation": "same"
+      }
+    },
+    "remediation": "Replace the 0.0.0.0/0 (or ::/0) source with a trusted range, or delete the rule.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "b33b2f515ea6831b0a2c2927c808a4e31482e21e99c66e99c7828aacc7826754",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  },
+  {
+    "check_id": "VPC-17",
+    "title": "No security group allows SSH (port 22) from the whole internet",
+    "status": "FAIL",
+    "resource": "aws_vpc_security_group_ingress_rule.ssh_modern",
+    "resource_type": "aws_vpc_security_group_ingress_rule",
+    "timestamp": "2026-11-18T00:24:29Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 6.3",
+      "nist_800_53_r5": "SC-7",
+      "iso_27001_2022": "A.8.20",
+      "soc2": "CC6.6"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/vpc_17.rego",
+      "problems": [
+        "allows SSH (port 22) from the whole internet"
+      ],
+      "checkov": {
+        "check_id": "CKV_AWS_24",
+        "result": "FAILED",
+        "relation": "same"
+      }
+    },
+    "remediation": "Replace the 0.0.0.0/0 (or ::/0) source with a trusted range, or delete the rule.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "b33b2f515ea6831b0a2c2927c808a4e31482e21e99c66e99c7828aacc7826754",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  }
+]

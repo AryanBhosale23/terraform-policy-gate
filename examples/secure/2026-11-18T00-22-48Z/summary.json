@@ -1,0 +1,134 @@
+{
+  "plan_file": "plan.json",
+  "plan_sha256": "fd4cc016f98f1add46bfdb11eebd747908d0abe7b495d7d137de1d599c80c58f",
+  "terraform_version": "1.17.1",
+  "timestamp": "2026-11-18T00:22:48Z",
+  "failed": 0,
+  "result": "PASS",
+  "rules": [
+    {
+      "check_id": "S3-07",
+      "title": "Every S3 bucket has a public access block with all four settings on",
+      "verdict": "PASS",
+      "pass": 2,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "S3-08",
+      "title": "Every S3 bucket has default encryption (AES256 or aws:kms)",
+      "verdict": "PASS",
+      "pass": 2,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "S3-09",
+      "title": "Every S3 bucket has versioning enabled",
+      "verdict": "PASS",
+      "pass": 2,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "S3-10",
+      "title": "Every S3 bucket writes server access logs to a log bucket",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 1
+    },
+    {
+      "check_id": "VPC-15",
+      "title": "Every VPC has a flow log that records rejected traffic",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "VPC-17",
+      "title": "No security group allows SSH (port 22) from the whole internet",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "VPC-18",
+      "title": "No security group allows RDP (port 3389) from the whole internet",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "CT-11",
+      "title": "Every CloudTrail trail is multi-region, logging, and records all management events",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "CT-12",
+      "title": "Every CloudTrail trail has log file validation enabled",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "CT-13",
+      "title": "Every CloudTrail trail encrypts its logs with a KMS key",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "KMS-19",
+      "title": "Automatic rotation is enabled on customer-managed KMS keys",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    },
+    {
+      "check_id": "IAM-06",
+      "title": "No IAM policy grants full administrator access",
+      "verdict": "PASS",
+      "pass": 1,
+      "fail": 0,
+      "error": 0,
+      "not_applicable": 0
+    }
+  ],
+  "disagreements": [
+    {
+      "check_id": "S3-08",
+      "resource": "aws_s3_bucket.demo",
+      "opa": "PASS",
+      "checkov": "CKV_AWS_145 FAILED",
+      "note": "Checkov requires a KMS key. This gate accepts AES256 as well, to match the scanner in Project 1."
+    },
+    {
+      "check_id": "S3-08",
+      "resource": "aws_s3_bucket.logs",
+      "opa": "PASS",
+      "checkov": "CKV_AWS_145 FAILED",
+      "note": "Checkov requires a KMS key. This gate accepts AES256 as well, to match the scanner in Project 1."
+    }
+  ]
+}

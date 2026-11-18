@@ -1,0 +1,36 @@
+[
+  {
+    "check_id": "VPC-15",
+    "title": "Every VPC has a flow log that records rejected traffic",
+    "status": "FAIL",
+    "resource": "aws_vpc.main",
+    "resource_type": "aws_vpc",
+    "timestamp": "2026-11-18T00:24:29Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 4.7",
+      "nist_800_53_r5": "SI-4",
+      "iso_27001_2022": "A.8.16",
+      "soc2": "CC7.2"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/vpc_15.rego",
+      "problems": [
+        "needs a flow log with traffic type REJECT or ALL"
+      ],
+      "checkov": {
+        "check_id": "CKV2_AWS_11",
+        "result": "FAILED",
+        "relation": "weaker"
+      }
+    },
+    "remediation": "Add an aws_flow_log for the VPC with traffic_type = \"REJECT\" or \"ALL\".",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "b33b2f515ea6831b0a2c2927c808a4e31482e21e99c66e99c7828aacc7826754",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  }
+]

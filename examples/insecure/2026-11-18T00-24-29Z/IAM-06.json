@@ -1,0 +1,36 @@
+[
+  {
+    "check_id": "IAM-06",
+    "title": "No IAM policy grants full administrator access",
+    "status": "FAIL",
+    "resource": "aws_iam_policy.admin",
+    "resource_type": "aws_iam_policy",
+    "timestamp": "2026-11-18T00:24:29Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 2.14",
+      "nist_800_53_r5": "AC-6",
+      "iso_27001_2022": "A.8.2",
+      "soc2": "CC6.3"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/iam_06.rego",
+      "problems": [
+        "grants full administrator access (Allow * on *)"
+      ],
+      "checkov": {
+        "check_id": "CKV_AWS_62",
+        "result": "FAILED",
+        "relation": "partial"
+      }
+    },
+    "remediation": "Replace the wildcard action and resource with the specific actions and resources needed, and never attach AdministratorAccess.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "b33b2f515ea6831b0a2c2927c808a4e31482e21e99c66e99c7828aacc7826754",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  }
+]

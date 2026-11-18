@@ -1,0 +1,64 @@
+[
+  {
+    "check_id": "S3-09",
+    "title": "Every S3 bucket has versioning enabled",
+    "status": "PASS",
+    "resource": "aws_s3_bucket.demo",
+    "resource_type": "aws_s3_bucket",
+    "timestamp": "2026-11-18T00:22:48Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, none",
+      "nist_800_53_r5": "CP-9",
+      "iso_27001_2022": "A.8.13",
+      "soc2": "A1.2"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/s3_09.rego",
+      "checkov": {
+        "check_id": "CKV_AWS_21",
+        "result": "PASSED",
+        "relation": "same"
+      }
+    },
+    "remediation": "Add an aws_s3_bucket_versioning for the bucket with status = \"Enabled\".",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "fd4cc016f98f1add46bfdb11eebd747908d0abe7b495d7d137de1d599c80c58f",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  },
+  {
+    "check_id": "S3-09",
+    "title": "Every S3 bucket has versioning enabled",
+    "status": "PASS",
+    "resource": "aws_s3_bucket.logs",
+    "resource_type": "aws_s3_bucket",
+    "timestamp": "2026-11-18T00:22:48Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, none",
+      "nist_800_53_r5": "CP-9",
+      "iso_27001_2022": "A.8.13",
+      "soc2": "A1.2"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/s3_09.rego",
+      "checkov": {
+        "check_id": "CKV_AWS_21",
+        "result": "PASSED",
+        "relation": "same"
+      }
+    },
+    "remediation": "Add an aws_s3_bucket_versioning for the bucket with status = \"Enabled\".",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "fd4cc016f98f1add46bfdb11eebd747908d0abe7b495d7d137de1d599c80c58f",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  }
+]

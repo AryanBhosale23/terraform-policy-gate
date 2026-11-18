@@ -1,0 +1,64 @@
+[
+  {
+    "check_id": "S3-07",
+    "title": "Every S3 bucket has a public access block with all four settings on",
+    "status": "PASS",
+    "resource": "aws_s3_bucket.demo",
+    "resource_type": "aws_s3_bucket",
+    "timestamp": "2026-11-18T00:22:48Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 3.1.4",
+      "nist_800_53_r5": "AC-3",
+      "iso_27001_2022": "A.8.3",
+      "soc2": "CC6.1"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/s3_07.rego",
+      "checkov": {
+        "check_id": "CKV2_AWS_6",
+        "result": "PASSED",
+        "relation": "weaker"
+      }
+    },
+    "remediation": "Add an aws_s3_bucket_public_access_block for the bucket with all four settings set to true.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "fd4cc016f98f1add46bfdb11eebd747908d0abe7b495d7d137de1d599c80c58f",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  },
+  {
+    "check_id": "S3-07",
+    "title": "Every S3 bucket has a public access block with all four settings on",
+    "status": "PASS",
+    "resource": "aws_s3_bucket.logs",
+    "resource_type": "aws_s3_bucket",
+    "timestamp": "2026-11-18T00:22:48Z",
+    "controls": {
+      "cis": "CIS AWS Foundations Benchmark v7.1.0, 3.1.4",
+      "nist_800_53_r5": "AC-3",
+      "iso_27001_2022": "A.8.3",
+      "soc2": "CC6.1"
+    },
+    "evidence": {
+      "engine": "opa",
+      "policy": "policies/s3_07.rego",
+      "checkov": {
+        "check_id": "CKV2_AWS_6",
+        "result": "PASSED",
+        "relation": "weaker"
+      }
+    },
+    "remediation": "Add an aws_s3_bucket_public_access_block for the bucket with all four settings set to true.",
+    "source": {
+      "type": "terraform_plan",
+      "plan_file": "plan.json",
+      "plan_sha256": "fd4cc016f98f1add46bfdb11eebd747908d0abe7b495d7d137de1d599c80c58f",
+      "terraform_version": "1.17.1",
+      "region": "us-east-1"
+    }
+  }
+]
